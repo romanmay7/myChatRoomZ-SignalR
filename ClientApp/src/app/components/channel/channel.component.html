@@ -6,7 +6,7 @@
     <div class="col-sm">
       <b>Available Channels:</b>
       <div *ngFor="let channel of channelService.channels">
-        <a (click)="reJoinChannel()" [routerLink]="['/channel',{id:channel.id}]">{{channel.title}}</a>
+        <a  [routerLink]="['/channel',{id:channel.id}]">{{channel.title}}</a>
       </div>
     </div>
 
