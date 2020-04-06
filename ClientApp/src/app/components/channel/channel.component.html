@@ -1,35 +1,46 @@
-<h1>Hello, world!Let's Chat</h1>
 
 <div class="container">
   <div class="row">
 
-    <div class="col-sm">
+    <div class="col-sm-2">
       <b>Available Channels:</b>
+      <hr />
       <div *ngFor="let channel of channelService.channels">
         <a  [routerLink]="['/channel',{id:channel.id}]">{{channel.title}}</a>
       </div>
     </div>
 
-    <div class="col-sm">
-      Channel Name:<b>{{current_channel.title}}</b>
-  <form id="chatForm" (ngSubmit)="onSubmit()" [formGroup]="chatForm">
-    <input id="submit" name="submit" type="text" formControlName="msgText" placeholder="Type a message" />
-    <button type="submit">Send</button>
-  </form>
-  <div *ngFor="let message of message_history">
-    <div><font color="blue">{{message.senderName}}</font> wrote {{ message.text }} on{{message.sentAt}}</div>
-  </div>
-</div>
+    <div class="col-sm-8">
+      <h2>Channel:<b>{{current_channel.title}}</b></h2>
+      <hr class="message-inner-separator" />
 
-    <div class="col-sm">
+      <form id="chatForm" (ngSubmit)="onSubmit()" [formGroup]="chatForm">
+        <input id="submit" name="submit" type="text" size="43" formControlName="msgText" placeholder="Type a message" />
+        <button type="submit">Send</button>
+      </form>
+
+      <div class="sms" *ngFor="let message of message_history">
+        <button class="close">
+          ×
+        </button>
+        <div class="rdir"><strong><div class="usr"><font color="blue">{{message.senderName}}</font></div></strong>
+                          <font color="brown">wrote on: {{message.sentAt | date:"medium"}}</font></div>
+        <hr class="message-inner-separator" />
+        <hr />
+        <div class="mcontent"><p>{{message.text}}</p></div>
+      </div>
+    </div>
+
+    <div class="col-sm-2">
       <b>People on this Channel:</b>
-        <div *ngFor="let client of connected_clients">
-          <div><font color="orange">{{client}}</font></div>
-        </div>
-</div>
+      <hr />
+      <div *ngFor="let client of connected_clients">
+        <div><font color="orange">{{client}}</font></div>
+      </div>
+    </div>
 
+      </div>
   </div>
-</div>
 
 
 
