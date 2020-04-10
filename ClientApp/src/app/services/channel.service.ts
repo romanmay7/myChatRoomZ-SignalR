@@ -9,17 +9,28 @@ export class ChannelService   {
 
   public chatterName: string = 'Visitor';
   public channels: Channel[];
+  public connected_clients: string[][]=[];
 
   constructor(private http: HttpClient) {
     this.chatterName += Math.floor(100 * Math.random());//Randomly Generated(Should be Current Logged In User)
+    this.loadChannels().then(()=>this.initiateConnectedClientsArray());//initiate 'connected_clients' array);
+    
   }
 
 
 
-  async loadChannels() {
+  async loadChannels() {//Load channels from Backend through API call
     this.channels = await this.http.get<Channel[]>("/api/channels").toPromise();
     console.log("Channels:"+this.channels);
+  
+  }
 
+  initiateConnectedClientsArray() {
+ 
+    for (var i=0; i < this.channels.length+1; i++)
+    {
+      this.connected_clients[i]=[];//Allocate space for each channel to store connected Clients Data 
+    }
   }
 
   async findAll(): Promise<Channel[]> {

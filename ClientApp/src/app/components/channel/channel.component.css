@@ -7,6 +7,26 @@
   padding: 2%;
 }
 
+.sms2 {
+  background-color: lightskyblue;
+  opacity: 0.4;
+  margin-left: 1%;
+  margin-top: 5%;
+  width: 80%;
+  text-align: left;
+  padding: 2%;
+}
+
+.sms3 {
+  background-color: greenyellow;
+  opacity: 0.4;
+  margin-left: 1%;
+  margin-top: 5%;
+  width: 80%;
+  text-align: left;
+  padding: 2%;
+}
+
 .footer {
   position: fixed;
 }
