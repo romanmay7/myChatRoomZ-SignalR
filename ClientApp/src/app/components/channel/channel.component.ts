@@ -94,7 +94,6 @@ export class ChannelComponent implements OnInit {
     this.sendMessage(this.chatForm.get('msgText').value);
   }
 
-
   sendMessage(chatform_message) {
     console.log(this.chatForm.get('msgText').value);
     // invoke 'SendMessage' on the Hub

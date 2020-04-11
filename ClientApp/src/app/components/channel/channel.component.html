@@ -18,11 +18,16 @@
       <hr class="message-inner-separator" />
 
       <form id="chatForm" (ngSubmit)="onSubmit()" [formGroup]="chatForm">
-        <input id="submit" name="submit" type="text" size="43" formControlName="msgText" placeholder="Type a message" />
-        <button type="submit">Send</button>
+        <div class="row">
+          <textarea id="submit" name="submit" type="text" height="auto" rows="3" cols="70" formControlName="msgText" placeholder="Type a message"></textarea>
+          <div class="columns">
+            <button type="submit" class="btn btn-success" style="margin:3px;">Send</button>
+            <button type="button" class="btn btn-warning" style="margin:3px;">Action 2</button>
+          </div>
+         </div>
       </form>
 
-      <div  *ngFor="let message of message_history" [ngClass]="{'sms':message.text!='Leaving the Channel','sms2':message.text=='Leaving the Channel','sms3':message.text=='Joining the Channel'}">
+      <div  *ngFor="let message of message_history.slice().reverse()" [ngClass]="{'sms':message.text!='Leaving the Channel','sms2':message.text=='Leaving the Channel','sms3':message.text=='Joining the Channel'}">
         <button *ngIf="(message.text!='Leaving the Channel')&&(message.text!='Joining the Channel')" class="close">
           ×
         </button>
