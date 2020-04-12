@@ -6,6 +6,7 @@ import { Message } from '../../data-models/message.model';
 import { ChannelService } from '../../services/channel.service';
 import { Channel } from '../../data-models/channel.model';
 import { trigger, style, transition, animate, keyframes, query, stagger, state } from "@angular/animations";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Component({
   selector: 'app-channel',
@@ -44,7 +45,7 @@ export class ChannelComponent implements OnInit {
 
  
 
-  constructor(private formBuilder: FormBuilder, private channelService: ChannelService, private activatedRoute: ActivatedRoute) { }
+  constructor(private formBuilder: FormBuilder, private channelService: ChannelService, private activatedRoute: ActivatedRoute, private http: HttpClient) { }
 
   async ngOnInit() {
 
@@ -114,12 +115,34 @@ export class ChannelComponent implements OnInit {
     this.sendMessage(this.chatForm.get('msgText').value);
   }
 
-  sendMessage(chatform_message) {
+  sendMessage(chatform_message)
+  {
     console.log(this.chatForm.get('msgText').value);
-    // invoke 'SendMessage' on the Hub
-    this.connection.invoke('SendMessage', this.channelService.chatterName, chatform_message, this.channel_id);
+    //
+    var new_message = new Message();
+    new_message.text = this.chatForm.get('msgText').value;
+    new_message.senderName = this.channelService.chatterName;
+    new_message.channelId = parseInt(this.channel_id);
+    new_message.sentAt = new Date();
 
+    //Post Message to the Server
+    this.http.post("/api/PostMessage", new_message,
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/json; charset=utf-8')
+        //.set(''Content-Type',application/x-www-form-urlencoded')
+      })
+      .subscribe(
+        (response) =>
+        {
+          console.log("Posted Message:"+response);
+          // invoke 'SendMessage' on the SignalR Hub to Update UI for all Connected Clients
+          this.connection.invoke('SendMessage', this.channelService.chatterName, chatform_message, this.channel_id);
+        },
+        (error) => { alert("Could not post a message"); console.log(error); }
+      )
   }
+
 
 }
 

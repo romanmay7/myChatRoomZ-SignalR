@@ -35,6 +35,21 @@ namespace myChatRoomZ.Data.Models
 
         }
 
+        public bool SaveAll()
+        {
+            return _context.SaveChanges() > 0;
+        }
+
+        public void AddEntity(object model)
+        {
+            _context.Add(model);
+        }
+
+        public void AddMessage(ChatMessage newOrder)
+        {
+            AddEntity(newOrder);
+        }
+
     }
 
 }

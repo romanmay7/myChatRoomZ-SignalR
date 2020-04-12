@@ -13,7 +13,7 @@ namespace myChatRoomZ.Controllers
 
     [ApiController]
     [Produces("application/json")]
-    public class ChannelController:Controller
+    public class ChannelController : Controller
     {
 
         private readonly IChatRoomZRepository _repository;
@@ -41,5 +41,42 @@ namespace myChatRoomZ.Controllers
                 return BadRequest("Bad request");
             }
         }
+
+
+        //ADDING TO REPOSITORY
+        [HttpPost]
+        [Route("api/PostMessage")]
+        public async Task<IActionResult> PostMessage([FromBody]ChatMessage model)
+        {
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+
+                    model.SentAt = DateTime.Now;
+                   _repository.AddMessage(model);
+
+                    if (_repository.SaveAll())
+                    {
+                        return Created($"/api/channels/{model.ChannelId}", model); //"Created" matching 201 code
+                    }
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to post New Message:{ex}");
+            }
+
+            return BadRequest("Failed to post New Message");
+
+
+        }
+
     }
+
 }

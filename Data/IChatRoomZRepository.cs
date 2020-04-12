@@ -10,5 +10,8 @@ namespace myChatRoomZ.Data
     public interface IChatRoomZRepository
     {
         public IEnumerable<Channel> GetAllChannels();
+        void AddEntity(object model);
+        void AddMessage(ChatMessage model);
+        bool SaveAll();
     }
 }

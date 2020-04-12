@@ -36,7 +36,7 @@
           <font color="brown"> wrote on: {{message.sentAt | date:"medium"}}</font>
         </div>
         <div *ngIf="(message.text=='Leaving the Channel')||(message.text=='Joining the Channel')" class="rdir">
-          <strong><font color="blue">{{message.senderName}}</font> {{message.text}} </strong> <font olor="gray">{{message.sentAt | date:"medium"}}</font>
+          <strong><font color="blue">{{message.senderName}}</font> {{message.text}} </strong> <font color="gray">{{message.sentAt | date:"medium"}}</font>
         </div>
         <hr *ngIf="(message.text!='Leaving the Channel')&&(message.text!='Joining the Channel')" class="message-inner-separator" />
         <hr />

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using myChatRoomZ.Data.Models;
 using myChatRoomZ.Services;
 
+
 namespace myChatRoomZ.SignalRHub
 {
     public class ChatHub:Hub
@@ -17,14 +18,18 @@ namespace myChatRoomZ.SignalRHub
         {
             _chatGroupService = chatGroupService;
         }
+    
         public async Task SendMessage(string name,string text, string channelId)
         {
             var message = new ChatMessage
             {
                 SenderName = name,
                 Text = text,
-                SentAt = DateTimeOffset.UtcNow
+                SentAt = DateTimeOffset.UtcNow,
+                ChannelId = Convert.ToInt32(channelId)
             };
+
+
             //Broadcast to all Clients,connected to Specific Channel(Group) 
             //The Name the function,that we're invoking on the Client:"RecieveMessage"
             await Clients.Group(channelId).SendAsync("RecieveMessage", message, channelId);
