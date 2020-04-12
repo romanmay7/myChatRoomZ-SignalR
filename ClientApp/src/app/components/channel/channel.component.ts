@@ -5,11 +5,31 @@ import * as Signal_R from '@aspnet/signalr';
 import { Message } from '../../data-models/message.model';
 import { ChannelService } from '../../services/channel.service';
 import { Channel } from '../../data-models/channel.model';
+import { trigger, style, transition, animate, keyframes, query, stagger, state } from "@angular/animations";
 
 @Component({
   selector: 'app-channel',
   templateUrl: './channel.component.html',
-  styleUrls: ['./channel.component.css']
+  styleUrls: ['./channel.component.css'],
+  animations: [
+    trigger('message_history', [
+      state('in', style({ transform: 'translateX(0)' })),
+      transition('void => *', [
+        animate('.6s ease-in', keyframes([
+          style({ opacity: 0, transform: 'translateY(-75%)', offset: 0 }),
+          style({ opacity: .5, transform: 'translateY(35px)', offset: .3 }),
+          style({ opacity: 1, transform: 'translateY(0)', offset: 1 }),
+        ]))
+      ]),
+      transition('* => void', [
+        animate('.6s ease-in', keyframes([
+          style({ opacity: 1, transform: 'translateY(0)', offset: 0 }),
+          style({ opacity: .5, transform: 'translateY(35px)', offset: .3 }),
+          style({ opacity: 0, transform: 'translateY(-75%)', offset: 1 }),
+        ]))
+      ])
+    ])
+  ]
 })
 export class ChannelComponent implements OnInit {
 

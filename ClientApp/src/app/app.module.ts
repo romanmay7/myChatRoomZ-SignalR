@@ -9,6 +9,7 @@ import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
 import { ChannelComponent } from './components/channel/channel.component';
 import { ChannelService } from './services/channel.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { ChannelService } from './services/channel.service';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'channel', component: ChannelComponent },
-    ])
+    ]),
+    BrowserAnimationsModule
   ],
   providers: [ChannelService],
   bootstrap: [AppComponent]
