@@ -50,9 +50,9 @@ namespace myChatRoomZ.Data.Models
             AddEntity(newMsg);
         }
 
-        private void RemoveEntity(ChatMessage Msg)
+        private void RemoveEntity(object model)
         {
-            _context.Remove(Msg);
+            _context.Remove(model);
         }
         public void DeleteMessage(ChatMessage model)
         {
