@@ -43,7 +43,7 @@ namespace myChatRoomZ.Controllers
         }
 
 
-        //ADDING TO REPOSITORY
+        //ADDING MESSAGES TO REPOSITORY
         [HttpPost]
         [Route("api/PostMessage")]
         public async Task<IActionResult> PostMessage([FromBody]ChatMessage model)
@@ -55,7 +55,7 @@ namespace myChatRoomZ.Controllers
                 {
 
                     model.SentAt = DateTime.Now;
-                   _repository.AddMessage(model);
+                    _repository.AddMessage(model);
 
                     if (_repository.SaveAll())
                     {
@@ -77,6 +77,35 @@ namespace myChatRoomZ.Controllers
 
         }
 
-    }
+        //REMOVING MESSAGES FROM REPOSITORY
+        [HttpPost]
+        [Route("api/DeleteMessage")]
+        public async Task<IActionResult> DeleteMessage([FromBody]ChatMessage model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
 
+                    _repository.DeleteMessage(model);
+
+                    if (_repository.SaveAll())
+                    {
+                        return Ok( model); //"OK" matching 200 code
+                    }
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to Delete Message:{ex}");
+            }
+
+            return BadRequest("Failed to Delete Message");
+        }
+
+    }
 }

@@ -13,5 +13,6 @@ namespace myChatRoomZ.Data
         void AddEntity(object model);
         void AddMessage(ChatMessage model);
         bool SaveAll();
+        void DeleteMessage(ChatMessage model);
     }
 }

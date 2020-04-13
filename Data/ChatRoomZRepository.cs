@@ -45,10 +45,20 @@ namespace myChatRoomZ.Data.Models
             _context.Add(model);
         }
 
-        public void AddMessage(ChatMessage newOrder)
+        public void AddMessage(ChatMessage newMsg)
         {
-            AddEntity(newOrder);
+            AddEntity(newMsg);
         }
+
+        private void RemoveEntity(ChatMessage Msg)
+        {
+            _context.Remove(Msg);
+        }
+        public void DeleteMessage(ChatMessage model)
+        {
+            RemoveEntity(model);
+        }
+
 
     }
 

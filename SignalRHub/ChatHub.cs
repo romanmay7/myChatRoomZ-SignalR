@@ -62,5 +62,12 @@ namespace myChatRoomZ.SignalRHub
             await Clients.All.SendAsync("JoinChannel", name, channelId);
             await SendMessage(name, "Joining the Channel", channelId);
         }
+
+        public async Task RemoveMessage(string message_date, string channelId)
+        {
+            //Broadcast to all Clients,connected to Specific Channel(Group) 
+            //The Name the function,that we're invoking on the Client:"RemoveMessage"
+            await Clients.Group(channelId).SendAsync("RemoveMessage", message_date, channelId);
+        }
     }
 }

@@ -100,21 +100,53 @@ export class ChannelComponent implements OnInit {
 
       //5.On Recieving Message from Clients who calls 'SendMessage on the Hub'
       this.connection.on('RecieveMessage', (msg: Message,id:number) => {
-        this.new_message = msg;
+        //this.new_message = msg;
         this.message_history.push(msg);
 
         //in the case the Sender is not included in the list of connected clients for the Specific Channel,Add him to the list
         if (this.channelService.connected_clients[id].indexOf(msg.senderName) === -1)
           this.channelService.connected_clients[id].push(msg.senderName);
       });
+
+      //6.On Recieving RemoveMessage from  the SignalRHub'
+      this.connection.on('RemoveMessage', (date: Date) => {
+        var index;
+        for (var i = 0; i < this.message_history.length; i++)
+        {
+          if (date == this.message_history[i].sentAt)
+            index = i;
+        }
+        this.message_history.splice(index, 1)
+      });
     }
   }
   //**************************************************************************************************************
-
+  onRemove(msg: Message)
+   {
+    if (msg.senderName == this.channelService.chatterName) {
+      //Delete Message from the Server
+      this.http.post("/api/DeleteMessage", msg,
+        {
+          headers: new HttpHeaders()
+            .set('Content-Type', 'application/json; charset=utf-8')
+          //.set(''Content-Type',application/x-www-form-urlencoded')
+        })
+        .subscribe(
+          (response) => {
+            console.log("Deleted Message:" + response);
+            // invoke 'RemoveMessage' on the SignalR Hub to Update UI for all Connected Clients
+            this.connection.invoke('RemoveMessage', msg.sentAt, this.channel_id);
+          },
+          (error) => { alert("Could not post a message"); console.log(error); }
+        )
+    }
+    else { alert("Only The Actual Poster of the Message or Admin are allowed to Delete it");}
+  }
+  //-----------------------------------------------------------------------------------------------------------------
   onSubmit() {
     this.sendMessage(this.chatForm.get('msgText').value);
   }
-
+  
   sendMessage(chatform_message)
   {
     console.log(this.chatForm.get('msgText').value);

@@ -28,7 +28,7 @@
       </form>
 
       <div [@message_history]="'in'" *ngFor="let message of message_history.slice().reverse();" [ngClass]="{'sms':message.text!='Leaving the Channel','sms2':message.text=='Leaving the Channel','sms3':message.text=='Joining the Channel'}">
-        <button *ngIf="(message.text!='Leaving the Channel')&&(message.text!='Joining the Channel')" class="close">
+        <button *ngIf="(message.text!='Leaving the Channel')&&(message.text!='Joining the Channel')" class="close" (click)="onRemove(message)">
           ×
         </button>
         <div *ngIf="(message.text!='Leaving the Channel')&&(message.text!='Joining the Channel')" class="rdir">
