@@ -12,6 +12,8 @@ namespace myChatRoomZ.Data.Models
         public string Text { get; set; }
         public  DateTimeOffset SentAt { get; set; }
 
+        public string Attachment { get; set; }
+
         public int ChannelId { get; set; }
     }
 }

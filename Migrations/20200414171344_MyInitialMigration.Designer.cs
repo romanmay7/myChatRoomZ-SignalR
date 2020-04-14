@@ -10,7 +10,7 @@ using myChatRoomZ.Data;
 namespace myChatRoomZ.Migrations
 {
     [DbContext(typeof(ChatRoomZContext))]
-    [Migration("20200403172349_MyInitialMigration")]
+    [Migration("20200414171344_MyInitialMigration")]
     partial class MyInitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,7 +46,10 @@ namespace myChatRoomZ.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ChannelId")
+                    b.Property<string>("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ChannelId")
                         .HasColumnType("int");
 
                     b.Property<string>("SenderName")
@@ -127,7 +130,9 @@ namespace myChatRoomZ.Migrations
                 {
                     b.HasOne("myChatRoomZ.Data.Models.Channel", null)
                         .WithMany("MessageHistory")
-                        .HasForeignKey("ChannelId");
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

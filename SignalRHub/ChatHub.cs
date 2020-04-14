@@ -19,7 +19,7 @@ namespace myChatRoomZ.SignalRHub
             _chatGroupService = chatGroupService;
         }
     
-        public async Task SendMessage(string name,string text,string channelId, int msgId = 0)
+        public async Task SendMessage(string name,string text,string channelId,int msgId = 0,string attach = "")
         {
             var message = new ChatMessage
             {
@@ -27,7 +27,8 @@ namespace myChatRoomZ.SignalRHub
                 SenderName = name,
                 Text = text,
                 SentAt = DateTimeOffset.UtcNow,
-                ChannelId = Convert.ToInt32(channelId)
+                ChannelId = Convert.ToInt32(channelId),
+                Attachment=attach
             };
 
 

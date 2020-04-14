@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as Signal_R from '@aspnet/signalr';
 import { Message } from '../../data-models/message.model';
 import { ChannelService } from '../../services/channel.service';
+import { UploadService } from '../../services/upload.service';
 import { Channel } from '../../data-models/channel.model';
 import { trigger, style, transition, animate, keyframes, query, stagger, state } from "@angular/animations";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -45,7 +46,7 @@ export class ChannelComponent implements OnInit {
 
  
 
-  constructor(private formBuilder: FormBuilder, private channelService: ChannelService, private activatedRoute: ActivatedRoute, private http: HttpClient) { }
+  constructor(private formBuilder: FormBuilder, private channelService: ChannelService, private uploadService: UploadService, private activatedRoute: ActivatedRoute, private http: HttpClient) { }
 
   async ngOnInit() {
 
@@ -156,6 +157,7 @@ export class ChannelComponent implements OnInit {
     new_message.senderName = this.channelService.chatterName;
     new_message.channelId = parseInt(this.channel_id);
     new_message.sentAt = new Date();
+    if (this.uploadService.attachment_name!="") { new_message.attachment = this.uploadService.attachment_name; }
 
     //Post Message to the Server
     this.http.post("/api/PostMessage", new_message,
@@ -170,12 +172,21 @@ export class ChannelComponent implements OnInit {
           console.log("Posted Message:" + response);
 
           // invoke 'SendMessage' on the SignalR Hub to Update UI for all Connected Clients
-          this.connection.invoke('SendMessage', this.channelService.chatterName, chatform_message, this.channel_id,response["id"]);
+          this.connection.invoke('SendMessage', this.channelService.chatterName, chatform_message, this.channel_id, response["id"], this.uploadService.attachment_name);
+          //Rreset Attachment
+          this.uploadService.attachment_name = "";
+          this.uploadService.upload_message = "";
+          this.uploadService.upload_progress = 0;
         },
         (error) => { alert("Could not post a message"); console.log(error); }
       )
   }
+  //--------------------------------------------------------------------------------------------------------------------------------------
 
+  createImgPath(img_name: string): string
+  {
+    return "https://localhost:44338/Resources/Images/" + img_name;
+  }
 
 }
 

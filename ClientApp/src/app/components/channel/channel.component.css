@@ -1,4 +1,14 @@
+.img_attachment 
+{
+  width: 100%;
+}
 
+.upload {
+  font-weight: bold;
+  color: #28a745;
+  margin-left: 15px;
+  line-height: 36px;
+}
 textarea {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;

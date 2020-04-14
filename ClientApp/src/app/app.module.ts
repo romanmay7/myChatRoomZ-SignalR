@@ -9,6 +9,7 @@ import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
 import { ChannelComponent } from './components/channel/channel.component';
 import { ChannelService } from './services/channel.service';
+import { UploadService } from './services/upload.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -30,7 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ]),
     BrowserAnimationsModule
   ],
-  providers: [ChannelService],
+  providers: [ChannelService, UploadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -57,7 +57,8 @@ namespace myChatRoomZ.Migrations
                     SenderName = table.Column<string>(nullable: true),
                     Text = table.Column<string>(nullable: true),
                     SentAt = table.Column<DateTimeOffset>(nullable: false),
-                    ChannelId = table.Column<int>(nullable: true)
+                    Attachment = table.Column<string>(nullable: true),
+                    ChannelId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,7 +68,7 @@ namespace myChatRoomZ.Migrations
                         column: x => x.ChannelId,
                         principalTable: "Channels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
