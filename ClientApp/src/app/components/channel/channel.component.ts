@@ -137,7 +137,7 @@ export class ChannelComponent implements OnInit {
             // invoke 'RemoveMessage' on the SignalR Hub to Update UI for all Connected Clients
             this.connection.invoke('RemoveMessage', msg.sentAt, this.channel_id);
           },
-          (error) => { alert("Could not post a message"); console.log(error); }
+          (error) => { alert("Could not remove the message"); console.log(error); }
         )
     }
     else { alert("Only The Actual Poster of the Message or Admin are allowed to Delete it");}
@@ -167,9 +167,10 @@ export class ChannelComponent implements OnInit {
       .subscribe(
         (response) =>
         {
-          console.log("Posted Message:"+response);
+          console.log("Posted Message:" + response);
+
           // invoke 'SendMessage' on the SignalR Hub to Update UI for all Connected Clients
-          this.connection.invoke('SendMessage', this.channelService.chatterName, chatform_message, this.channel_id);
+          this.connection.invoke('SendMessage', this.channelService.chatterName, chatform_message, this.channel_id,response["id"]);
         },
         (error) => { alert("Could not post a message"); console.log(error); }
       )

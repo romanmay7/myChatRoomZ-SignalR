@@ -19,10 +19,11 @@ namespace myChatRoomZ.SignalRHub
             _chatGroupService = chatGroupService;
         }
     
-        public async Task SendMessage(string name,string text, string channelId)
+        public async Task SendMessage(string name,string text,string channelId, int msgId = 0)
         {
             var message = new ChatMessage
             {
+                Id= msgId,
                 SenderName = name,
                 Text = text,
                 SentAt = DateTimeOffset.UtcNow,

@@ -56,6 +56,8 @@ namespace myChatRoomZ.Data.Models
         }
         public void DeleteMessage(ChatMessage model)
         {
+            //Channel ch = _context.Channels.Include("MessageHistory").Single(a => a.Id == model.ChannelId);
+            //ChatMessage msg = ch.MessageHistory.Single(a => a.Id == model.Id);
             RemoveEntity(model);
         }
 
