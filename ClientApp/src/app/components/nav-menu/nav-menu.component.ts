@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-menu',
@@ -10,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class NavMenuComponent {
   isExpanded = false;
 
-  constructor(private log_service: LoginService, private http: HttpClient) { }
+  constructor(private log_service: LoginService, private http: HttpClient, private router: Router) { }
 
   collapse() {
     this.isExpanded = false;
@@ -26,6 +27,7 @@ export class NavMenuComponent {
     this.log_service.loggedIn = false;
     console.log("LogOUt");
     this.http.get("/Account/Logout");
+    this.router.navigate(['/']);
 
   }
 }
