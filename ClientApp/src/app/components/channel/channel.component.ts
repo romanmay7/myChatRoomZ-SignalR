@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as Signal_R from '@aspnet/signalr';
 import { Message } from '../../data-models/message.model';
 import { ChannelService } from '../../services/channel.service';
@@ -8,6 +8,7 @@ import { UploadService } from '../../services/upload.service';
 import { Channel } from '../../data-models/channel.model';
 import { trigger, style, transition, animate, keyframes, query, stagger, state } from "@angular/animations";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-channel',
@@ -36,7 +37,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 export class ChannelComponent implements OnInit {
 
   public channel_id: string;
-  public current_channel:Channel;
+  public current_channel: Channel;
 
   public connection: any;//SignalR Hub Client's Connection Object
   public isConnected:boolean=false 
@@ -46,9 +47,15 @@ export class ChannelComponent implements OnInit {
 
  
 
-  constructor(private formBuilder: FormBuilder, private channelService: ChannelService, private uploadService: UploadService, private activatedRoute: ActivatedRoute, private http: HttpClient) { }
+  constructor(private formBuilder: FormBuilder, private channelService: ChannelService, private uploadService: UploadService,
+    private activatedRoute: ActivatedRoute, private http: HttpClient, private loginService: LoginService, private router: Router) { }
 
   async ngOnInit() {
+
+    if (this.loginService.loginRequired) {
+      //Force Login
+      this.router.navigate(["login"])
+    } 
 
     //Track changes of id parameter in Route
     this.activatedRoute.params.subscribe(async params => {
@@ -173,7 +180,7 @@ export class ChannelComponent implements OnInit {
 
           // invoke 'SendMessage' on the SignalR Hub to Update UI for all Connected Clients
           this.connection.invoke('SendMessage', this.channelService.chatterName, chatform_message, this.channel_id, response["id"], this.uploadService.attachment_name);
-          //Rreset Attachment
+          //Reset Attachment
           this.uploadService.attachment_name = "";
           this.uploadService.upload_message = "";
           this.uploadService.upload_progress = 0;
