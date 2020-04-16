@@ -18,9 +18,13 @@
         <a routerLink="/index" class="btn btn-default cancel-button">Cancel</a>
       </div>
     </form>
+    
     <p class="login-label">
-      Don't  already Have an Account ?
+      Don't Already Have an Account ?
       <a routerLink="/signup" class="loginhere-link">Sign Up here</a>
     </p>
+    <hr />
+   Or Simply <button type="button" (click)="signInWithGoogle()" class="btn btn-danger"><i class="fa fa-google"></i> Login with Google</button>
+    
   </div>
 </div>

@@ -13,7 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-
+using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace myChatRoomZ.Controllers
 {
@@ -161,5 +161,101 @@ namespace myChatRoomZ.Controllers
             }
             return BadRequest();
         }
+ //----------Authentication with Google-----------------------------------------------------------------------------------
+
+        [HttpPost]
+        public async Task<IActionResult> GoogleLogin([FromBody]GoogleLoginRequest request)
+        {
+            Payload payload=null;
+            try
+            {
+                //Validates a Google issued Web Token
+                payload = await ValidateAsync(request.IdToken, new ValidationSettings
+                {
+                    Audience = new[] { "xxxxxxx" }
+                });
+                // It is important to add your ClientId as an audience in order to make sure
+                // that the token is for your application!
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Exception thrown:"+e);
+                // Invalid token
+            }
+
+            var user = await GetOrCreateExternalLoginUser("google", payload.Subject, payload.Email, payload.GivenName, payload.FamilyName);
+            var token = await GenerateToken(user);
+            return  Created("",token);
+        }
+
+        public async Task<ChatUser> GetOrCreateExternalLoginUser(string provider, string key, string email, string firstName, string lastName)
+        {
+            // If Login already linked to a user
+           var user = await _userManager.FindByLoginAsync(provider, key);
+           if (user != null) return user;
+
+            user = await _userManager.FindByEmailAsync(email);
+             if (user == null)
+            {
+                // No user exists with this email address, we create a new one
+                user = new ChatUser
+                {
+                    Email = email,
+                    UserName = email,
+                    FirstName = firstName,
+                    LastName = lastName
+                };
+
+                await _userManager.CreateAsync(user);
+            }
+
+            // Link the user to this login
+            var info = new UserLoginInfo(provider, key, provider.ToUpperInvariant());
+            var result = await _userManager.AddLoginAsync(user, info);
+            if (result.Succeeded)
+                return user;
+
+            //_logger.LogError("Failed add a user linked to a login.");
+           // _logger.LogError(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+            return null;
+        }
+
+        public async Task<object> GenerateToken(ChatUser user)
+
+        {
+          //var claims = await GetUserClaims(user);
+            var claims = new[]
+            {
+               new Claim(JwtRegisteredClaimNames.Sub,user.Email),
+               new Claim(JwtRegisteredClaimNames.Jti,new Guid().ToString())
+               // new Claim(JwtRegisteredClaimNames.UniqueName,user.UserName)
+             };
+
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                _config["Tokens:Issuer"],
+                _config["Tokens:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(30),
+                signingCredentials: creds
+                );
+
+            var results = new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo
+
+            };
+
+            return results;
+        }
     }
+
+    public class GoogleLoginRequest
+    {
+        public string IdToken { get; set; }
+}
 }

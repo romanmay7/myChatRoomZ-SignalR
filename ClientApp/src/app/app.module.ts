@@ -14,7 +14,24 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginService } from './services/login.service';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
+import { GoogleLoginProvider, FacebookLoginProvider } from "angularx-social-login";
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
+let config = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider("xxxxxxx")
+  },
+  {
+    id: FacebookLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider("Facebook-App-Id")
+  }
+]);
+
+export function provideConfig() {
+  return config;
+}
 
 @NgModule({
   declarations: [
@@ -36,9 +53,11 @@ import { SignupComponent } from './components/signup/signup.component';
       { path: 'login', component: LoginComponent },
       { path: 'signup', component: SignupComponent }
     ]),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    SocialLoginModule,
+    AngularFontAwesomeModule
   ],
-  providers: [ChannelService, UploadService,LoginService],
+  providers: [ChannelService, UploadService, LoginService, { provide: AuthServiceConfig, useFactory: provideConfig }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

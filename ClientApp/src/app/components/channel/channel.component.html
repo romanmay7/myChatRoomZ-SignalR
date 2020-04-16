@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row">
 
-    <div class="col-sm-2">
+    <div class="col-12 col-lg-2">
       <b>Available Channels:</b>
       <hr />
       <div *ngFor="let channel of channelService.channels">
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div class="col-sm-8">
+    <div class="col-12 col-lg-8">
       <h2>
         Channel:
         <b>{{current_channel.title}}</b>
@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <div class="col-sm-2">
+    <div class="col-12 col-lg-2">
       <b>People on this Channel:</b>
       <hr />
       <div *ngFor="let client of channelService.connected_clients[channel_id]">

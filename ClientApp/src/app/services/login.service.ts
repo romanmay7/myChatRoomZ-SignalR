@@ -34,6 +34,20 @@ export class LoginService
       );
   }
 
+  loginGoogle(request): Observable<boolean> {
+    return this.http
+      .post("/Account/GoogleLogin", request)
+      .pipe(
+        map((data: any) => {
+          this.token = data.token;
+          this.tokenExpiration = data.expiration;
+          //this.currentUser = creds.username;
+          return true;
+        })
+
+      );
+  }
+
   resetToken() {
     this.token = "";
   }

@@ -16,6 +16,7 @@ using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNet.Identity;
 
 namespace myChatRoomZ
 {
@@ -47,7 +48,8 @@ namespace myChatRoomZ
             services.AddIdentity<ChatUser, IdentityRole>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<ChatRoomZContext>();
+            }).AddEntityFrameworkStores<ChatRoomZContext>()
+            .AddDefaultTokenProviders();
 
             services.AddCors(options =>
             {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using myChatRoomZ.Data;
 
 namespace myChatRoomZ.Migrations
 {
     [DbContext(typeof(ChatRoomZContext))]
-    partial class ChatRoomZContextModelSnapshot : ModelSnapshot
+    [Migration("20200416190741_MyInitialMigration")]
+    partial class MyInitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
